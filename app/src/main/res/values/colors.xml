@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- 颜色 -->
+
 <resources>
+    <color name="color_light_green">#1de9b6</color>
+    <color name="colorAccent">#009688</color>
     <color name="colorPrimary">#009688</color>
     <color name="colorPrimaryDark">#00796B</color>
-    <color name="colorAccent">#009688</color>
-    <color name="color_light_green">#1de9b6</color>
-    <color name="background">#424242</color>
     <color name="background_text_light">#FAFAFA</color>
     <color name="background_hint">#c5c5c5</color>
+    <color name="background">#424242</color>
 
     <!-- FloatingButton -->
-    <color name="black_semi_transparent">#B2000000</color>
-    <color name="half_black">#808080</color>
     <color name="white">#e9ecea</color>
     <color name="white_pressed">#a9acaa</color>
+    <color name="half_black">#808080</color>
+    <color name="black_semi_transparent">#B2000000</color>
 
 
 </resources>

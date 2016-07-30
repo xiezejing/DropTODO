@@ -1,5 +1,11 @@
 package com.benx.droptodo;
 
+/**
+ *
+ *  主界面 MainActivity
+ *
+ */
+
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -19,6 +25,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     /**
+     *
      *  变量声明
      *  FloatButton:
      *      1.  FloatMenu   菜单FloatingActionsMenu 可以addButton
@@ -58,7 +65,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         // Toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
