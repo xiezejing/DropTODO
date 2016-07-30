@@ -1,0 +1,10 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+       android:shape="rectangle">
+    <!-- NavBar 头部背景颜色 -->
+    <gradient
+        android:angle="225"
+        android:centerColor="#1de9b6"
+        android:endColor="#00bfa5"
+        android:startColor="#64ffda"
+        android:type="linear"/>
+</shape>
