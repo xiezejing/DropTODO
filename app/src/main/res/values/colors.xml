@@ -3,19 +3,28 @@
 <!-- 颜色 -->
 
 <resources>
+
+    <!-- 主要颜色 -->
     <color name="color_light_green">#1de9b6</color>
     <color name="colorAccent">#009688</color>
     <color name="colorPrimary">#009688</color>
     <color name="colorPrimaryDark">#00796B</color>
+    <color name="background_all_light">#FFFFFF</color>
     <color name="background_text_light">#FAFAFA</color>
     <color name="background_hint">#c5c5c5</color>
     <color name="background">#424242</color>
 
-    <!-- FloatingButton -->
+    <!-- FloatingMenu 的颜色 -->
     <color name="white">#e9ecea</color>
     <color name="white_pressed">#a9acaa</color>
     <color name="half_black">#808080</color>
     <color name="black_semi_transparent">#B2000000</color>
+
+    <!-- PriorityBar 的颜色 -->
+    <color name="priority_V_important">#ff1744</color>
+    <color name="priority_important">#ffa54f</color>
+    <color name="priority_normal">#0091ea</color>
+    <color name="priority_casual">#1de9b6</color>
 
 
 </resources>

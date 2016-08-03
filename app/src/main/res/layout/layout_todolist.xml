@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--TODO:-->
+    <!-- todo 1.跑马灯 -->
+
+<!-- 待办事项的样式 -->
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view2"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:layout_marginTop="5dp"
+    android:clickable="true"
+    android:foreground="?attr/selectableItemBackground"
+    card_view:cardCornerRadius="8dp"
+    card_view:cardElevation="5dp">
+
+
+    <!-- 总布局（两行） -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:orientation="vertical">
+
+
+        <!-- 第一行（优先条，标题，待办时间） -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_margin="4dp"
+            android:orientation="horizontal">
+
+            <!-- 优先条 -->
+            <ImageView
+                android:id="@+id/todo_priority"
+                android:layout_width="6dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp" />
+
+            <!-- （标题 和 待办时间） -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <!-- 标题 -->
+                <TextView
+                    android:id="@+id/todo_title"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="start|center_vertical"
+                    android:paddingStart="5dp"
+                    android:textSize="25sp" />
+
+                <!-- 待办时间 -->
+                <TextView
+                    android:id="@+id/todo_time"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="top|end"
+                    android:paddingEnd="8dp"
+                    android:paddingTop="5dp"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <!-- 第二行（提醒事项，checkBox，快速排序按钮） -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+            android:orientation="horizontal">
+
+            <!-- 提醒事项(一,二,三) -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="35dp"
+                android:layout_weight="4"
+                android:orientation="vertical">
+
+                <!-- 提醒事项一 -->
+                <TextView
+                    android:id="@+id/todo_list_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_weight="1"
+                    android:textSize="16sp" />
+                <!-- 提醒事项二 -->
+                <TextView
+                    android:id="@+id/todo_list_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_weight="1"
+                    android:textSize="16sp" />
+                <!-- 提醒事项三 -->
+                <TextView
+                    android:id="@+id/todo_list_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_weight="1"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <!-- CheckBox 和 快速排序按钮 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <!-- CheckBox -->
+                <CheckBox
+                    android:id="@+id/todo_done"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:visibility="visible" />
+
+                <!-- 快速排序按钮 -->
+                <ImageView
+                    android:id="@+id/todo_reorder"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_card_reorder"
+                    android:tint="@color/colorAccent"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

@@ -19,7 +19,7 @@
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
-        app:theme="@style/AppTheme1"
+        app:theme="@style/AppTheme_NavigationView"
         app:itemIconTint="@color/background"
         app:itemTextColor="@color/background"
         android:layout_width="wrap_content"

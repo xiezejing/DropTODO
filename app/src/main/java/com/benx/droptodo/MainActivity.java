@@ -6,6 +6,9 @@ package com.benx.droptodo;
  *
  */
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -14,12 +17,19 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -54,6 +64,14 @@ public class MainActivity extends AppCompatActivity
     // Navigation
     private NavigationView navigationView;
 
+    // 一些重要参数
+    public static int CURRENT_THEME = 0;    // 当前的主题
+    public static int ScreenWidth;    // 当前屏幕的宽度
+
+    // 一些重要常量
+    public static final List<ToDo> ToDoList = new ArrayList<>();          // 待办事项
+    public static final List<ToDo> DeleteToDoList = new ArrayList<>();    // 删除的待办事项
+
 
     /**
      *
@@ -66,22 +84,25 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Toolbar
+        // Toolbar 部分
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Drawer
+
+        // Drawer 部分
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        // Navigation
+
+        // Navigation 部分
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // FloatButton
+
+        // FloatMenu 部分
         FloatMenu = (FloatingActionsMenu) findViewById(R.id.FAB);
         CreateFloat = (FloatingActionButton) findViewById(R.id.FAB_create);
 
@@ -93,27 +114,42 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        // FloatingActionButton
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+
+        // 初始化数据
+        initData();
+
+
+        // 获取屏幕宽度
+        WindowManager wm = (WindowManager) MainActivity.this
+                .getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics outMetrics = new DisplayMetrics();
+
+        wm.getDefaultDisplay().getMetrics(outMetrics);
+        ScreenWidth = outMetrics.widthPixels;
+
+
+        // 初始化加载TodoListFragment
+        TodoListFragment fragment = new TodoListFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content_main_framelayout1, fragment,"content")
+                .addToBackStack(null)
+                .commit();
 
     }
 
     /**
-     *  返回键（BACK）被按下时
+     *  返回键 (BACK) 被按下时
      */
     @Override
     public void onBackPressed() {
+
+        // 处理侧栏
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
+            // 侧栏显示则收回
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            // 侧栏隐藏则触发Back
             super.onBackPressed();
         }
     }
@@ -121,14 +157,14 @@ public class MainActivity extends AppCompatActivity
 
     /**
      *
-     *  选项菜单（OptionMenu）被创建时
+     *  选项菜单 (OptionMenu) 被创建时
      *
      * @param menu
      * @return
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // 加载
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -136,7 +172,7 @@ public class MainActivity extends AppCompatActivity
 
     /**
      *
-     *  选项被选中时
+     *  选项菜单 (OptionMenu) 选项被选中时
      *
      * @param item
      * @return
@@ -159,7 +195,7 @@ public class MainActivity extends AppCompatActivity
 
     /**
      *
-     *  侧栏选项(NabigationItem)被选中时
+     *  侧栏选项 (NabigationItem) 被选中时
      *
      * @param item
      * @return
@@ -167,9 +203,10 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+        // 获取被点击的 item ID
         int id = item.getItemId();
 
+        // 对不同 item 进行不同的操作
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
@@ -180,14 +217,51 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_colors) {
+
+//            if (getTheme() == getResources(R.style.AppTheme)) {
+//
+//            }
+
+
+            // TODO 改变背景颜色
+
+            int color_dark = Color.argb(255,66,66,66);
+            int color_light = 0;
+
+//            RelativeLayout layout =(RelativeLayout)findViewById(R.id
+//                    .content_main);
+//            layout.setBackgroundColor(color_light);
+
+            if (CURRENT_THEME == color_dark) {
+                findViewById(R.id.content_main).setBackgroundColor(color_light);
+                CURRENT_THEME = color_light;
+                Log.d("getin","to white");
+            } else {
+
+                Log.d("getin","to dark");
+
+                findViewById(R.id.content_main).setBackgroundColor(color_dark);
+                CURRENT_THEME = color_dark;
+            }
 
         } else if (id == R.id.nav_help) {
+
             Toast.makeText(MainActivity.this, "help", Toast.LENGTH_SHORT).show();
+            toolbar.setSubtitle("Help");
         }
 
+        // 关闭当前 DrawerLayout
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    // TODO 初始化。目前以初始化实例为测试，最后将封装为数据库读取
+    private void initData() {
+        for (int i = 0; i < 10; i++) {
+            ToDoList.add(new ToDo());
+        }
     }
 }
