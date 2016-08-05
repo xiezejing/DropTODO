@@ -1,5 +1,6 @@
 package com.benx.droptodo;
 
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
@@ -123,6 +124,28 @@ public class TodoListFragment extends Fragment {
 
         // 新建一个 ItemTouchHelper 实例    （onMove onSwiped 等）
         itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+
+            /**
+             * 控制是否可以侧滑
+             *
+             * @return 返回主活动的控制标志
+             */
+            @Override
+            public boolean isItemViewSwipeEnabled() {
+                return MainActivity.swappable;
+            }
+
+
+            /**
+             * 控制是否可以长按拖动
+             *
+             * @return 返回住活动的控制标志
+             */
+            @Override
+            public boolean isLongPressDragEnabled() {
+                return MainActivity.draggable;
+            }
+
 
             /**
              * 设置限定拖动和侧滑的方向
@@ -313,22 +336,15 @@ public class TodoListFragment extends Fragment {
         public void onBindViewHolder(final ToDoViewHolder holder, int position) {
             // 获取重要参数
             final int _position = position;     // 当前位置
-            //final float elevation = holder.itemView.getElevation(); //
-            // 当前抬起度
+
 
             // 获取数据集中的目标数据
             final ToDo _todo = ToDoList.get(position);
 
             // 设置显示数据
 
-            // 优先级 // TODO: 2016/8/3 优先级颜色设定
-            // TODO: 2016/8/3 下面的方式不行
-            //GradientDrawable priorityGrad = (GradientDrawable)holder.todoPriorityBar.getBackground();
-           // priorityGrad.setColor(_todo.todoPriority);
-            // TODO: 2016/8/3  getDrawable(int) 过时
+            // 优先级
             holder.todoPriorityBar.setBackground(getPriorityBar(position));
-            // TODO: 2016/8/3 下面的方式会改变圆角矩形
-            //holder.todoPriorityBar.setBackgroundColor(_todo.todoPriority);
 
             // 标题
             holder.todoTitleText.setText(_todo.todoTitle);
@@ -370,7 +386,14 @@ public class TodoListFragment extends Fragment {
             holder.todoDoneBox.setChecked(_todo.todoDone);  // 根据数据完成状态显示
             
             // 拖动钮
-            // TODO: 2016/8/3 实现方法大致入checkbox 根据数据reorder模式显示或隐藏（设计CheckBox） 
+            // TODO: 2016/8/3 实现方法大致入checkbox 根据数据reorder模式显示或隐藏（设计CheckBox）
+            if (_todo.todoReorderMode == ToDo.REORDER_NORMALMODE) {
+                holder.todoDoneBox.setVisibility(View.VISIBLE);
+                holder.todoReorderButton.setVisibility(View.GONE);
+            } else if (_todo.todoReorderMode == ToDo.REORDER_QUICKMODE) {
+                holder.todoDoneBox.setVisibility(View.GONE);
+                holder.todoReorderButton.setVisibility(View.VISIBLE);
+            }
 
         }
 
@@ -393,16 +416,28 @@ public class TodoListFragment extends Fragment {
         @Override
         public void onClick(View v) {
 
+            if (!MainActivity.clickable) {
+                return;
+            }
+
             // 获取点击的位置
             int position = recyclerView.getChildAdapterPosition(v);
 
-            // TODO 还有别的点击事件在此处处理。 点击进入待办事项卡片
+            Intent intent = new Intent(getActivity(), EditTodoActivity.class);
+            intent.putExtra("position", position);
+            startActivity(intent);
 
         }
 
 
         /**
          * *********** 自定义方法  ***********
+         */
+        /**
+         *
+         *
+         * @param position
+         * @return
          */
         public Drawable getPriorityBar(int position) {
 
@@ -469,7 +504,6 @@ public class TodoListFragment extends Fragment {
                 todoItem3Text = (TextView) itemView.findViewById(R.id.todo_list_3);
                 todoDoneBox = (CheckBox) itemView.findViewById(R.id.todo_done);
                 todoReorderButton = (ImageView) itemView.findViewById(R.id.todo_reorder);
-
             }
         }
 

@@ -12,11 +12,11 @@
     android:layout_marginBottom="5dp"
     android:layout_marginLeft="20dp"
     android:layout_marginRight="20dp"
-    android:layout_marginTop="5dp"
+    android:layout_marginTop="10dp"
     android:clickable="true"
     android:foreground="?attr/selectableItemBackground"
     card_view:cardCornerRadius="8dp"
-    card_view:cardElevation="5dp">
+    card_view:cardElevation="10dp">
 
 
     <!-- 总布局（两行） -->

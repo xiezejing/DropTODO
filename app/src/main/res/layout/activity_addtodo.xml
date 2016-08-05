@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- AddTodoActivity 布局 -->
+
+<android.support.design.widget.CoordinatorLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context="com.benx.droptodo.AddTodoActivity">
+
+    <!-- tools:context="com.benx.droptodo.AddTodoActivity" 这一句不会打包进apk，只是让ADT能找到Manifest里对应的activity的Theme之类的 -->
+
+
+    <!-- 加载 Toobar -->
+    <include
+        layout="@layout/app_bar_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- 总布局 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="50dp">
+
+        <!-- 第一行（两列） -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            android:orientation="horizontal">
+
+            <!-- 第一列 标题 时间 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:orientation="vertical">
+
+                <!-- 标题 -->
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textinputlayout_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="30dp">
+
+                    <EditText
+                        android:id="@+id/addtodo_settitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/addtodo_add_title"
+                        android:singleLine="true"
+                        android:textSize="25dp"
+
+                        />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <!-- 时间 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="20dp"
+                    android:orientation="vertical"
+                    android:paddingTop="5dp">
+
+                    <!-- 待办时间 标题 -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:paddingStart="5dp"
+                        android:text="@string/addtodo_add_todotime"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20dp" />
+
+                    <!-- 待办时间 结果和按钮 -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <!-- 待办时间 结果 -->
+                        <TextView
+                            android:id="@+id/addtodo_todotime_show"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="5dp"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="13dp" />
+
+                        <!-- 待办时间 按钮 -->
+                        <Button
+                            android:id="@+id/addtodo_settodotime"
+                            android:layout_width="match_parent"
+                            android:layout_height="25dp"
+                            android:layout_marginStart="10dp"
+                            android:background="@drawable/btn_addtodo_settime"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:text="@string/addtodo_add_settime"
+                            android:textColor="@color/white" />
+
+                    </LinearLayout>
+
+
+                    <!-- 提醒时间 标题 -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:paddingStart="5dp"
+                        android:text="@string/addtodo_add_toalarmtime"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20dp" />
+
+                    <!-- 提醒时间 结果和按钮 -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <!-- 提醒时间 结果 -->
+                        <TextView
+                            android:id="@+id/addtodo_toalarmtime_show"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="5dp"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="13dp" />
+
+                        <!-- 提醒时间 按钮 -->
+                        <Button
+                            android:id="@+id/addtodo_setalarmtime"
+                            android:layout_width="match_parent"
+                            android:layout_height="25dp"
+                            android:layout_marginStart="10dp"
+                            android:background="@drawable/btn_addtodo_settime"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:text="@string/addtodo_add_settime"
+                            android:textColor="@color/white" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <!-- 第二列 优先级 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="50dp"
+                android:layout_weight="2"
+                android:orientation="vertical">
+
+                <!-- 优先级 标题 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/addtodo_add_priority"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20dp" />
+
+                <!-- 优先级 选择 -->
+                <RadioGroup
+                    android:id="@+id/addtodo_setpriority"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp">
+
+                    <!-- Very Important -->
+                    <RadioButton
+                        android:id="@+id/todo_priority_vimportant"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:buttonTint="@color/priority_V_important"
+                        android:text="@string/addtodo_add_priority_vimportant"
+                        android:textColor="@android:color/tab_indicator_text" />
+                    <!-- Important -->
+                    <RadioButton
+                        android:id="@+id/todo_priority_important"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:buttonTint="@color/priority_important"
+                        android:text="@string/addtodo_add_priority_important"
+                        android:textColor="@android:color/tab_indicator_text" />
+                    <!-- Normal -->
+                    <RadioButton
+                        android:id="@+id/todo_priority_normal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:buttonTint="@color/priority_normal"
+                        android:text="@string/addtodo_add_priority_normal"
+                        android:textColor="@android:color/tab_indicator_text" />
+                    <!-- Casual -->
+                    <RadioButton
+                        android:id="@+id/todo_priority_casual"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:buttonTint="@color/priority_casual"
+                        android:text="@string/addtodo_add_priority_casual"
+                        android:textColor="@android:color/tab_indicator_text" />
+
+                </RadioGroup>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 第二行（一列） -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <!-- item 1 -->
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textinputlayout_item1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
+
+                <EditText
+                    android:id="@+id/addtodo_setitem1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/addtodo_add_item1"
+                    android:singleLine="true" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <!-- item 2 -->
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textinputlayout_item2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
+
+                <EditText
+                    android:id="@+id/addtodo_setitem2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/addtodo_add_item2"
+                    android:singleLine="true"
+
+                    />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <!-- item 3 -->
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textinputlayout_item3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
+
+                <EditText
+                    android:id="@+id/addtodo_setitem3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/addtodo_add_item3"
+                    android:singleLine="true"
+
+                    />
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <!-- 第三行 （一列） -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/addtodo_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/btn_addtodo_settime"
+                android:foreground="?attr/selectableItemBackground"
+                android:text="@string/addtodo_add_cancel"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/addtodo_submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/btn_addtodo_settime"
+                android:foreground="?attr/selectableItemBackground"
+                android:text="@string/addtodo_add_submit"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

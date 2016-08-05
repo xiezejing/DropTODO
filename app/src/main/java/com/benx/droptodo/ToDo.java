@@ -16,10 +16,6 @@ public class ToDo implements Serializable {
     public static final int REORDER_NORMALMODE = 0;
 
     /** 优先级 颜色 */
-//    public static final int V_IMPORTANT = Color.argb(255,255,23,68);
-//    public static final int IMPORTANT = Color.argb(255,255,165,79);
-//    public static final int NORMAL = Color.argb(255,0,145,234);
-//    public static final int CASUAL = Color.argb(255,29,233,182);
     public static final int V_IMPORTANT = 10;
     public static final int IMPORTANT = 11;
     public static final int NORMAL = 12;
@@ -57,24 +53,35 @@ public class ToDo implements Serializable {
     /** 待办事项 排序模式 */
     public int todoReorderMode;
 
+    /** 待办事项 创建时间 */
+    public long todoCreateTime;
+
     /**
      * *********** 构造方法 ***********
      */
+    /**
+     *
+     *
+     * @param Title 标题
+     * @param TodoTime 执行时间
+     * @param AlarmTime 提醒时间
+     * @param Priority 优先级
+     * @param Item1 提醒 1
+     * @param Item2 提醒 2
+     * @param Item3 提醒 3
+     */
+    public ToDo(String Title, long TodoTime, long AlarmTime, int Priority,String Item1, String Item2,String Item3) {
 
-    // TODO　测试用，到时候记得删除
-    public ToDo() {
-        Calendar calendar = Calendar.getInstance();
+        Calendar c = Calendar.getInstance();
+        todoCreateTime = c.getTimeInMillis();
 
-        todoPriority = CASUAL;
-
-        todoTitle = "This is Title";
-
-        todoItem1 = "hello，there";
-        todoItem2 = "hello, android!";
-        todoItem3 = "what i have to do , i dont know yet.";
-
-        todoTime = calendar.getTimeInMillis();
-
+        todoTitle = Title;
+        todoTime = TodoTime;
+        toAlarmTime = AlarmTime;
+        todoPriority = Priority;
+        todoItem1 = Item1;
+        todoItem2 = Item2;
+        todoItem3 = Item3;
         todoDone = false;
         todoReorderMode = REORDER_NORMALMODE;
     }

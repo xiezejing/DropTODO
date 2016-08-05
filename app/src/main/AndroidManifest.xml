@@ -1,30 +1,72 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<!-- 配置文件 -->
-
+<?xml version="1.0" encoding="utf-8"?><!-- 配置文件 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.benx.droptodo">
+    package="com.benx.droptodo">
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:screenOrientation="portrait"
         android:theme="@style/AppTheme">
 
-        <!-- 主Activity -->
-        <!--    1.强制竖屏 screenOrientation="portrait" -->
+
+        <!-- SplashActivity 启动页 -->
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".SplashActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+
+        <!-- SplashIntro 启动引导页 -->
+        <activity
+            android:name=".SplashIntro"
+            android:label="myintro"
+            android:theme="@style/FullscreenTheme">
+        </activity>
+
+
+        <!-- 主Activity -->
+        <!-- 1.强制竖屏 screenOrientation="portrait" -->
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <!--todo <action android:name="android.intent.action.MAIN" />-->
+
+                <!--todo <category android:name="android.intent.category.LAUNCHER" />-->
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+
+        <!-- 添加todo Activity -->
+        <activity
+            android:name=".AddTodoActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
+
+        </activity>
+
+        <!-- 添加todo Activity -->
+        <activity
+            android:name=".EditTodoActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
+
+        </activity>
+
+
     </application>
 
 </manifest>

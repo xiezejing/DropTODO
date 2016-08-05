@@ -1,8 +1,30 @@
 <resources>
+    <!-- 主要界面 -->
     <string name="app_name">DropTODO</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <!-- 启动页 -->
+    <string name="splash_info">Version 0.0.9 alpha\nMade by Ben.X</string>
+    
+    <!-- 添加界面 -->
+    <string name="addtodo_nav_subtitle">Add A New One</string>
+    <string name="addtodo_add_title">Title</string>
+    <string name="addtodo_add_priority">Priority</string>
+    <string name="addtodo_add_priority_vimportant">Very Important</string>
+    <string name="addtodo_add_priority_important">Important</string>
+    <string name="addtodo_add_priority_normal">Normal</string>
+    <string name="addtodo_add_priority_casual">Casual</string>
+    <string name="addtodo_add_todotime">ToDo Time</string>
+    <string name="addtodo_add_settime">Set Time</string>
+    <string name="addtodo_add_cancel">Cancel</string>
+    <string name="addtodo_add_submit">Submit</string>
+    <string name="addtodo_add_toalarmtime">Alarm Time</string>
+    <string name="addtodo_add_item1">Item No.1</string>
+    <string name="addtodo_add_item2">Item No.2</string>
+    <string name="addtodo_add_item3">Item No.3</string>
+
 </resources>

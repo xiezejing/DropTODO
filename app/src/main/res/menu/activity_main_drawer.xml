@@ -2,53 +2,51 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
+        <!-- 待办事项 -->
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import"/>
+            android:id="@+id/nav_todolist"
+            android:icon="@drawable/ic_menu_tololist"
+            android:title="Todo List"/>
+
+        <!-- 垃圾箱 -->
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery"/>
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow"/>
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools"/>
+            android:id="@+id/nav_deletebox"
+            android:icon="@drawable/ic_menu_deletebox"
+            android:title="Recycle Bin"/>
+
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:checkable="true"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share"/>
-            <item
-                android:id="@+id/nav_send"
-                android:checkable="true"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send"/>
-        </menu>
-    </item>
 
-    <item android:title="Settings">
+    <item android:title="Options">
         <menu>
-            <!-- 设置 -->
+            <!-- 改背景颜色 -->
             <item
                 android:id="@+id/nav_colors"
                 android:checkable="true"
                 android:icon="@drawable/ic_menu_colors"
                 android:title="Background Color"/>
 
+            <!-- 删除 -->
             <item
-                android:id="@+id/nav_settings"
+                android:id="@+id/nav_delete"
                 android:checkable="true"
-                android:icon="@drawable/ic_menu_settings"
-                android:title="Settings"/>
+                android:icon="@drawable/ic_menu_delete"
+                android:title="Delete"/>
+
+            <item
+                android:id="@+id/nav_quickreorder"
+                android:icon="@drawable/ic_menu_reorder"
+                android:title="Quick Drag"/>
+
+            <item
+                android:id="@+id/nav_drag"
+                android:icon="@drawable/ic_menu_undraggable"
+                android:title="Undraggable"/>
+
+            <item
+                android:id="@+id/nav_checkoredit"
+                android:icon="@drawable/ic_menu_editmode"
+                android:title="Edit Mode"/>
         </menu>
     </item>
 
@@ -61,18 +59,18 @@
                 android:icon="@drawable/ic_menu_help"
                 android:title="Help"/>
 
-            <!-- 联系方式 -->
+            <!-- 反馈 -->
             <item
-                android:id="@+id/nav_contact"
+                android:id="@+id/nav_feedback"
                 android:checkable="true"
-                android:icon="@drawable/ic_menu_contact"
+                android:icon="@drawable/ic_menu_feedback"
                 android:title="Contact Us"/>
 
             <!-- 版权 -->
             <item
                 android:id="@+id/nav_copyright"
                 android:checkable="true"
-                android:icon="@drawable/ic_menu_copyright"
+                android:icon="@drawable/ic_menu_code"
                 android:title="Copyright"/>
         </menu>
     </item>

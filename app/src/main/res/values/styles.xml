@@ -1,32 +1,34 @@
 <resources>
 
-    <!-- Base application theme. -->
+    <!-- 基础主题 -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+        <!-- 自定义主题 -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
         <!-- TODO 先尝试白色背景 -->
         <item name="android:windowBackground">@color/background_all_light</item>
-        <!--<item name="android:windowBackground">@color/background</item>-->
-        <!-- TODO 字体颜色-->
-        <!--<item name="android:textColor">@color/background_text_light</item>-->
         
     </style>
 
+
+    <!-- 取消 ActionBar 的主题 -->
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
+
+    <!-- 弹出菜单的主题 -->
     <style name="AppTheme.AppBarOverlay"
            parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark"/>
 
 
-    <!-- todo 测试换主题 -->
+
+    <!-- NavigationView 的主题 -->
     <style name="AppTheme_NavigationView" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/color_light_green</item>
@@ -46,4 +48,10 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+
+    <!-- Splash Intro 的全屏主题 -->
+    <style name="FullscreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
 </resources>

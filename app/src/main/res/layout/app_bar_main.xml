@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- AppBar 的主体部分  -->
+<!-- AppBar 及 主体部分  -->
 
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -34,6 +34,7 @@
     <include layout="@layout/content_main"/>
 
 
+    <!-- FloatingButton 菜单 -->
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/FAB"
         android:layout_width="wrap_content"
@@ -46,20 +47,21 @@
         fab:fab_labelStyle="@style/menu_labels_style">
 
         <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/FAB_create"
+            android:id="@+id/fab_reoder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/white"
-            app:fab_icon="@drawable/ic_menu_camera"
+            app:fab_icon="@drawable/ic_menu_reorder"
             fab:fab_title="Action A"
             fab:fab_colorPressed="@color/white_pressed"/>
 
         <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/action_b"
+            android:id="@+id/fab_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:fab_icon="@drawable/ic_float_add"
             fab:fab_colorNormal="@color/white"
-            fab:fab_title="Action with a very long name that won\'t fit on the screen"
+            fab:fab_title="Add New Todo"
             fab:fab_colorPressed="@color/white_pressed"/>
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
