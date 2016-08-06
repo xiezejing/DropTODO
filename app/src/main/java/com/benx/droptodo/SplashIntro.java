@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntro2;
 
 /**
@@ -16,7 +17,7 @@ import com.github.paolorotolo.appintro.AppIntro2;
  *
  */
 
-public class SplashIntro extends AppIntro2 {
+public class SplashIntro extends AppIntro {
 
     /**
      * 加载主 Activity

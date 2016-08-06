@@ -148,6 +148,7 @@ public class AddTodoActivity extends AppCompatActivity {
         todoTime_show = (TextView) findViewById(R.id.addtodo_todotime_show);
         alarmTime_show = (TextView) findViewById(R.id.addtodo_toalarmtime_show);
 
+
         // 待办时间选择器
         setTodoTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,13 +165,14 @@ public class AddTodoActivity extends AppCompatActivity {
 
                 Log.d("getin", System.currentTimeMillis()+"");
                 year = calendar.get(Calendar.YEAR);
+                Log.d("getin", year+"");
                 month = calendar.get(Calendar.MONTH);
-                day = calendar.get(Calendar.DAY_OF_YEAR);
+                day = calendar.get(Calendar.DAY_OF_MONTH);
                 hour = calendar.get(Calendar.HOUR_OF_DAY);
                 minute = calendar.get(Calendar.MINUTE);
 
                 // 初始化 DatePicker
-                datePicker.init(year-1, month+5, day, new DatePicker.OnDateChangedListener() {
+                datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
                     @Override
                     public void onDateChanged(DatePicker view,final int _year, int _monthOfYear, int _dayOfMonth) {
                         // 更新年月日
@@ -212,6 +214,7 @@ public class AddTodoActivity extends AppCompatActivity {
                         c.clear();
                         c.set(year,month,day,hour,minute);
 
+
                         // 显示结果并更新按钮
                         todoTime_show.setText(dateFormat.format(c.getTimeInMillis()));
                         setTodoTime.setText("Set");
@@ -240,22 +243,17 @@ public class AddTodoActivity extends AppCompatActivity {
                 final TimePicker timePicker = (TimePicker) view.findViewById(R.id.timepicker_time);
 
                 // 获取当前时间
-                // TODO: 2016/8/5 测试当前时间
                 Calendar calendar = Calendar.getInstance();
-
 
                 year = calendar.get(Calendar.YEAR);
                 month = calendar.get(Calendar.MONTH);
-                day = calendar.get(Calendar.DAY_OF_YEAR);
+                day = calendar.get(Calendar.DAY_OF_MONTH);
                 hour = calendar.get(Calendar.HOUR_OF_DAY);
                 minute = calendar.get(Calendar.MINUTE);
 
-                Log.d("getin", "onClick: year: "+year);
-                Log.d("getin", "onClick: month: "+month);
 
                 // 初始化 DatePicker
-                // TODO: 2016/8/5 BUG?
-                datePicker.init(year-1, month+5, day, new DatePicker.OnDateChangedListener() {
+                datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
                     @Override
                     public void onDateChanged(DatePicker view,final int _year, int _monthOfYear, int _dayOfMonth) {
                         // 更新年月日

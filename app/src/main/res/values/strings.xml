@@ -1,15 +1,21 @@
 <resources>
-    <!-- 主要界面 -->
+    <!-- APP 名称 -->
     <string name="app_name">DropTODO</string>
+    <string name="app_slogan">To do and make a difference.</string>
 
+    
+    <!-- 侧栏 -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
+    
+    <!-- Toolbar -->
+    <string name="action_ocdmode">OCD Mode</string>
+    <string name="action_marquee">Marquee Mode</string>
 
     <!-- 启动页 -->
-    <string name="splash_info">Version 0.0.9 alpha\nMade by Ben.X</string>
-    
+    <string name="splash_info">Version 0.1.0 alpha\nMade By Ben.X</string>
+
     <!-- 添加界面 -->
     <string name="addtodo_nav_subtitle">Add A New One</string>
     <string name="addtodo_add_title">Title</string>
@@ -26,5 +32,9 @@
     <string name="addtodo_add_item1">Item No.1</string>
     <string name="addtodo_add_item2">Item No.2</string>
     <string name="addtodo_add_item3">Item No.3</string>
+
+    <!-- 反馈页面 -->
+    <string name="feedback_label_email">Email or Nickname</string>
+    <string name="feedback_label_content">Feedback</string>
 
 </resources>

@@ -203,12 +203,12 @@ public class EditTodoActivity extends AppCompatActivity {
 
                 year = calendar.get(Calendar.YEAR);
                 month = calendar.get(Calendar.MONTH);
-                day = calendar.get(Calendar.DAY_OF_YEAR);
+                day = calendar.get(Calendar.DAY_OF_MONTH);
                 hour = calendar.get(Calendar.HOUR_OF_DAY);
                 minute = calendar.get(Calendar.MINUTE);
 
                 // 初始化 DatePicker
-                datePicker.init(year-1, month+5, day, new DatePicker.OnDateChangedListener() {
+                datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
                     @Override
                     public void onDateChanged(DatePicker view,final int _year, int _monthOfYear, int _dayOfMonth) {
                         // 更新年月日
@@ -281,12 +281,12 @@ public class EditTodoActivity extends AppCompatActivity {
 
                 year = calendar.get(Calendar.YEAR);
                 month = calendar.get(Calendar.MONTH);
-                day = calendar.get(Calendar.DAY_OF_YEAR);
+                day = calendar.get(Calendar.DAY_OF_MONTH);
                 hour = calendar.get(Calendar.HOUR_OF_DAY);
                 minute = calendar.get(Calendar.MINUTE);
 
                 // 初始化 DatePicker
-                datePicker.init(year-1, month+5, day, new DatePicker.OnDateChangedListener() {
+                datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
                     @Override
                     public void onDateChanged(DatePicker view,final int _year, int _monthOfYear, int _dayOfMonth) {
                         // 更新年月日

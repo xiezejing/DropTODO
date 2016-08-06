@@ -19,6 +19,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private final static String DataBaseName = "DropTODO.db";
     public final static String Todo_Table = "Todos";
     public final static String DeletedTodo_Table = "Deletes";
+    public final static String Feedback_Table = "Feedbacks";
 
     /** 建表语句 */
     public static final String CREATE_TODOS = "create table " + Todo_Table + " ("
@@ -27,6 +28,9 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String CREATE_DELETES = "create table " + DeletedTodo_Table + " ("
             + " id integer primary key autoincrement,"
             + "Deleted text)";
+    public static final String CREATE_FEEDBACKS = "create table " + Feedback_Table + " ("
+            + " id integer primary key autoincrement,"
+            + "FeedbackId text)";
 
 
     /**
@@ -55,6 +59,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.execSQL(CREATE_TODOS);
         db.execSQL(CREATE_DELETES);
+        db.execSQL(CREATE_FEEDBACKS);
 
         db.setTransactionSuccessful();
         db.endTransaction();

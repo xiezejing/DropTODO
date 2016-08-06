@@ -27,17 +27,15 @@ import java.util.Date;
 import java.util.List;
 
 /**
- *
  * Project: DropTODO
  * Author:  Ben.X
- * Date:    2016/8/2
- *
+ * Date:    2016/8/6
  */
-public class TodoListFragment extends Fragment {
+
+public class RecycleBinFragment extends Fragment {
     /**
      * *********** 常量 ***********
      */
-    private final List<ToDo> ToDoList;          // 待办事项
     private final List<ToDo> DeleteToDoList;    // 删除的待办事项
 
     public ToDoAdapter toDoAdapter;             // 适配器
@@ -46,29 +44,38 @@ public class TodoListFragment extends Fragment {
     public RecyclerView recyclerView;           // RecyclerView 实例
     public static float Elevation;              // itemView 的抬起度
 
+
     public SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd\nHH:mm  ");
-                                                // 时间格式
+    // 时间格式
+
+
+    //// TODO: 2016/8/6 linshi 
+    public String TAG = "lll";
+
 
 
     /**
-    * *********** 构造方法 ***********
-    */
+     * *********** 构造方法 ***********
+     */
 
-    public TodoListFragment() {
+    public RecycleBinFragment() {
+        Log.d(TAG, "RecycleBinFragment: new");
         toDoAdapter = new ToDoAdapter();
 
         // 获取 MainActivity 中的数据集
-        ToDoList = MainActivity.ToDoList;
+        // TODO: 2016/8/6 如果要还原则直接操作并还原 
+        //ToDoList = MainActivity.ToDoList;
         DeleteToDoList = MainActivity.DeleteToDoList;
-
+        Log.d(TAG, "RecycleBinFragment: get deletelist size:"+DeleteToDoList.size());
     }
+
+
 
 
 
     /**
      * *********** 重写方法 -- Fragment ***********
      */
-
     /**
      * 当 Fragment 新建 View 时
      *
@@ -80,8 +87,10 @@ public class TodoListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView: ");
         return new RecyclerView(container.getContext());
     }
+
 
 
     /**
@@ -92,6 +101,7 @@ public class TodoListFragment extends Fragment {
      */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        Log.d(TAG, "onViewCreated: ");
         super.onViewCreated(view, savedInstanceState);
 
         // 参数view是我们再onCreateView中返回的view
@@ -106,13 +116,11 @@ public class TodoListFragment extends Fragment {
         // 设置布局类型 -- LinearLayoutManager 相当于ListView的样式
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-
         // 设置监听 实例itemTouchHelper
         setListener();
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
     }
-
 
 
     /**
@@ -124,8 +132,8 @@ public class TodoListFragment extends Fragment {
      *
      */
     private void setListener() {
-
         // 新建一个 ItemTouchHelper 实例    （onMove onSwiped 等）
+        Log.d(TAG, "setListener: get");
         itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
 
             /**
@@ -148,6 +156,7 @@ public class TodoListFragment extends Fragment {
             public boolean isLongPressDragEnabled() {
                 return MainActivity.draggable;
             }
+
 
 
             /**
@@ -183,6 +192,7 @@ public class TodoListFragment extends Fragment {
             }
 
 
+
             /**
              * 拖动 item 时回调
              *
@@ -204,12 +214,13 @@ public class TodoListFragment extends Fragment {
                 int to = target.getAdapterPosition();
 
                 // 交换数据集
-                Collections.swap(ToDoList, from, to);
+                Collections.swap(DeleteToDoList, from, to);
 
                 // 交换 item
                 toDoAdapter.notifyItemMoved(from, to);
                 return true;
             }
+
 
 
             /**
@@ -250,6 +261,7 @@ public class TodoListFragment extends Fragment {
             }
 
 
+
             /**
              * 对 item 拖拽或侧滑完成（或撤销）时回调，清除临时被改变的状态
              *
@@ -260,9 +272,6 @@ public class TodoListFragment extends Fragment {
             public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                 super.clearView(recyclerView, viewHolder);
 
-                // TODO 保留 以防需要
-                //viewHolder.itemView.setBackgroundColor(Color.WHITE);
-
                 // 设置透明度返回原状
                 viewHolder.itemView.setAlpha(1.0f);
 
@@ -271,6 +280,7 @@ public class TodoListFragment extends Fragment {
                 viewHolder.itemView.setScaleX((float) 1);
                 viewHolder.itemView.setScaleY((float) 1);
             }
+
 
 
             /**
@@ -295,12 +305,9 @@ public class TodoListFragment extends Fragment {
         });
     }
 
-
-
     /**
      * *********** 内部类  ***********
      */
-
     /**
      * ------ 定义 ToDoAdapter 类
      */
@@ -332,12 +339,13 @@ public class TodoListFragment extends Fragment {
          */
         @Override
         public void onBindViewHolder(final ToDoViewHolder holder, int position) {
+            Log.d(TAG, "onBindViewHolder: called");
             // 获取重要参数
             final int _position = position;     // 当前位置
 
 
             // 获取数据集中的目标数据
-            final ToDo _todo = ToDoList.get(position);
+            final ToDo _todo = DeleteToDoList.get(position);
 
             // 设置显示数据
 
@@ -368,7 +376,6 @@ public class TodoListFragment extends Fragment {
                         // 落下
                         holder.itemView.setElevation(0);
 
-                        // TODO: 2016/8/3 还需要动态添加背景颜色改变
                     } else {
                         // 设置对应数据的完成状态
                         _todo.todoDone = false;
@@ -382,16 +389,16 @@ public class TodoListFragment extends Fragment {
                 }
             });
             holder.todoDoneBox.setChecked(_todo.todoDone);  // 根据数据完成状态显示
-            
+
             // 拖动钮
             // TODO: 2016/8/3 实现方法大致入checkbox 根据数据reorder模式显示或隐藏（设计CheckBox）
-            if (_todo.todoReorderMode == ToDo.REORDER_NORMALMODE) {
-                holder.todoDoneBox.setVisibility(View.VISIBLE);
-                holder.todoReorderButton.setVisibility(View.GONE);
-            } else if (_todo.todoReorderMode == ToDo.REORDER_QUICKMODE) {
-                holder.todoDoneBox.setVisibility(View.GONE);
-                holder.todoReorderButton.setVisibility(View.VISIBLE);
-            }
+//            if (_todo.todoReorderMode == ToDo.REORDER_NORMALMODE) {
+//                holder.todoDoneBox.setVisibility(View.VISIBLE);
+//                holder.todoReorderButton.setVisibility(View.GONE);
+//            } else if (_todo.todoReorderMode == ToDo.REORDER_QUICKMODE) {
+//                holder.todoDoneBox.setVisibility(View.GONE);
+//                holder.todoReorderButton.setVisibility(View.VISIBLE);
+//            }
 
 
 
@@ -414,10 +421,11 @@ public class TodoListFragment extends Fragment {
                 holder.todoItem2Text.setEllipsize(TextUtils.TruncateAt.MARQUEE);
                 holder.todoItem3Text.setMarqueeRepeatLimit(-1);
                 holder.todoItem3Text.setEllipsize(TextUtils.TruncateAt.MARQUEE);
-                
+
             }
 
         }
+
 
 
         /**
@@ -427,8 +435,9 @@ public class TodoListFragment extends Fragment {
          */
         @Override
         public int getItemCount() {
-            return ToDoList.size();
+            return DeleteToDoList.size();
         }
+
 
         /**
          * item 点击时回调
@@ -437,19 +446,28 @@ public class TodoListFragment extends Fragment {
          */
         @Override
         public void onClick(View v) {
+            Log.d(TAG, "onClick: call");
 
             if (!MainActivity.clickable) {
                 return;
             }
 
             // 获取点击的位置
-            int position = recyclerView.getChildAdapterPosition(v);
+            final int position = recyclerView.getChildAdapterPosition(v);
 
-            Intent intent = new Intent(getActivity(), EditTodoActivity.class);
-            intent.putExtra("position", position);
-            startActivity(intent);
+            // TODO: 2016/8/6 用snack替换，实现回收
+            SnackbarHelper.LongSnackbar(getView(),"Sure to recycle "+DeleteToDoList.get(position).todoTitle+" ?", SnackbarHelper.Info).setAction("Yes", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
+                    MainActivity.ToDoList.add(DeleteToDoList.get(position));
+                    DeleteToDoList.remove(position);
+                    notifyDataSetChanged();
+                    SnackbarHelper.LongSnackbar(getView(), "Check it in your Todo list.", SnackbarHelper.Confirm).setActionTextColor(Color.DKGRAY).show();
+                }
+            }).setActionTextColor(Color.DKGRAY).show();
         }
+
 
 
         /**
@@ -464,7 +482,7 @@ public class TodoListFragment extends Fragment {
         public Drawable getPriorityBar(int position) {
 
             // 获取数据集中对应的优先级
-            int priority = ToDoList.get(position).todoPriority;
+            int priority = DeleteToDoList.get(position).todoPriority;
 
             // 声明一个 Drawable 资源
             Drawable drawableResource = null;
@@ -530,6 +548,7 @@ public class TodoListFragment extends Fragment {
         }
 
 
+
         /**
          * *********** 自定义方法  ***********
          */
@@ -542,7 +561,7 @@ public class TodoListFragment extends Fragment {
         public void addItem(ToDo todo, int position) {
 
             // 添加到数据集
-            ToDoList.add(position, todo);
+            DeleteToDoList.add(position, todo);
 
             // 添加 item
             notifyItemInserted(position);
@@ -557,28 +576,39 @@ public class TodoListFragment extends Fragment {
          *
          * @param position
          */
-        public void removeItem(int position) {
+        public void removeItem(final int position) {
             Log.d("getin", "removeItem: called");
 
-            // 从数据集中缓存要删除的 todo
-            ToDo todo = ToDoList.get(position);
+            // 从数据集中缓存要删除的待办事项
+            final ToDo todo = DeleteToDoList.get(position);
             Log.d("getin", "removeItem: want to remove: "+todo.todoTitle);
 
-            // 回收到回收数据集
-            DeleteToDoList.add(todo);
-
             // 从数据集中删除
-            ToDoList.remove(position);
-
-            Log.d("getin", "removeItem: deleted list add a todo : "+todo.todoTitle);
+            DeleteToDoList.remove(position);
 
             // 删除 item
             notifyItemRemoved(position);
 
-            // TODO: 2016/8/3 需要添加撤销功能
-            // TODO: 2016/8/7 不准备用撤销了，只提醒
-            SnackbarHelper.LongSnackbar(getView(),"Drop to recycle bin.", SnackbarHelper.Alert).show();
-        }
-    }
-}
+            // 询问是否撤销
+            // TODO: 2016/8/6
+            SnackbarHelper.LongSnackbar(getView(),"Sure to delete "+todo.todoTitle+" forever?", SnackbarHelper.Warning).setAction("Undo", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addItem(todo,position);
+                    SnackbarHelper.LongSnackbar(getView(), "It's back now.", SnackbarHelper.Confirm).setActionTextColor(Color.DKGRAY).show();
+                }
+            }).setActionTextColor(Color.WHITE).show();
 
+
+
+            Log.d("getin", "removeItem: forever delete a todo : "+todo.todoTitle);
+            // TODO: 2016/8/6 删除集添加成功
+
+
+            // TODO: 2016/8/3 需要添加撤销功能
+        }
+
+
+    }
+
+}

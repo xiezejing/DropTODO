@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/white"
             app:fab_icon="@drawable/ic_menu_reorder"
-            fab:fab_title="Action A"
+            fab:fab_title="Reorder"
             fab:fab_colorPressed="@color/white_pressed"/>
 
         <com.getbase.floatingactionbutton.FloatingActionButton

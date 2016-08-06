@@ -4,6 +4,9 @@ android {
     compileSdkVersion 23
     buildToolsVersion "24.0.1"
 
+    //**兼容Android6.0系统所需，如果这句话报错，可在dependencies标签下使用compile 'cn.bmob.android:http-legacy:1.0'**
+    useLibrary 'org.apache.http.legacy'
+
     defaultConfig {
         applicationId "com.benx.droptodo"
         minSdkVersion 21
@@ -29,4 +32,8 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:24.1.0'
     compile 'com.android.support:cardview-v7:24.1.0'
     compile 'com.github.paolorotolo:appintro:4.0.0'
+
+    // Bmob 部分
+    compile 'cn.bmob.android:bmob-sdk:3.5.1'
+    compile 'cn.bmob.android:http-legacy:1.0'
 }

@@ -33,10 +33,10 @@
                 android:icon="@drawable/ic_menu_delete"
                 android:title="Delete"/>
 
-            <item
-                android:id="@+id/nav_quickreorder"
-                android:icon="@drawable/ic_menu_reorder"
-                android:title="Quick Drag"/>
+            <!--<item-->
+                <!--android:id="@+id/nav_quickreorder"-->
+                <!--android:icon="@drawable/ic_menu_reorder"-->
+                <!--android:title="Quick Drag"/>-->
 
             <item
                 android:id="@+id/nav_drag"

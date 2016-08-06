@@ -44,6 +44,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -66,7 +67,8 @@ public class MainActivity extends AppCompatActivity
 
     // TodoListFragment
     private TodoListFragment fragment;
-
+    // RecycleBinFragment
+    private RecycleBinFragment recyclefragment;
 
     /**
      *
@@ -81,6 +83,7 @@ public class MainActivity extends AppCompatActivity
     public static boolean draggable;
     public static boolean swappable;
     public static boolean clickable;
+    public static boolean isMarquee = true;     // 是否开启跑马灯模式
 
 
     /**
@@ -89,8 +92,9 @@ public class MainActivity extends AppCompatActivity
      *
      */
     // 数据集
-    public static final List<ToDo> ToDoList = new ArrayList<>();          // 待办事项
-    public static final List<ToDo> DeleteToDoList = new ArrayList<>();    // 删除的待办事项
+    public static final List<ToDo> ToDoList = new ArrayList<>();            // 待办事项
+    public static final List<ToDo> DeleteToDoList = new ArrayList<>();      // 删除的待办事项
+    public static final List<String> FeedbackList = new ArrayList<>();      // 仅保留Feedback的id
     public static DBHelper dbHelper;
     public static SQLiteDatabase database;
 
@@ -144,8 +148,30 @@ public class MainActivity extends AppCompatActivity
         ReorderFloat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v, "create",Snackbar.LENGTH_SHORT).setAction
+
+                List<ToDo> donelist = new ArrayList<ToDo>();
+
+                for (int i = 0; i < ToDoList.size(); i++) {
+
+                    ToDo newtodo = ToDoList.get(i);
+
+                    if (newtodo.todoDone) {
+                        donelist.add(newtodo);
+                        ToDoList.remove(i);
+                    }
+
+                }
+
+                for (int i = 0; i < donelist.size(); i++) {
+                    ToDoList.add(donelist.get(i));
+                }
+
+                Snackbar.make(v, "Reorder done!",Snackbar.LENGTH_SHORT).setAction
                         ("Action",null).show();
+
+
+                fragment.toDoAdapter.notifyDataSetChanged();
+
 
                 // 收回菜单
                 FloatMenu.collapse();
@@ -182,12 +208,21 @@ public class MainActivity extends AppCompatActivity
         ScreenWidth = outMetrics.widthPixels;
 
 
-        // 初始化加载TodoListFragment
+        // 初始化加载 TodoListFragment
         fragment = new TodoListFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_main_framelayout1, fragment,"content")
-// Todo 考虑不用压栈效果               .addToBackStack(null)
                 .commit();
+
+        // 初始化加载 RecycleBinFragment
+        recyclefragment = new RecycleBinFragment();
+
+
+        // 提醒没有待办事项
+        if (ToDoList.isEmpty()) {
+            //Toast.makeText(MainActivity.this, "You have no todo yet", Toast.LENGTH_SHORT).show();
+            SnackbarHelper.LongSnackbar((DrawerLayout)findViewById(R.id.drawer_layout),"You have no todo yet.", SnackbarHelper.Confirm).show();
+        }
 
     }
 
@@ -198,8 +233,9 @@ public class MainActivity extends AppCompatActivity
         
         super.onStart();
         fragment.toDoAdapter.notifyDataSetChanged();
-        // TODO: 2016/8/5 测试 invalidate（）
-        //fragment.recyclerView.invalidateItemDecorations(););
+        recyclefragment.toDoAdapter.notifyDataSetChanged();
+        // TODO: 2016/8/6 此时刷新界面为佳
+
     }
 
     @Override
@@ -262,7 +298,9 @@ public class MainActivity extends AppCompatActivity
 
                 // 双击退出程序
                 isExit = true;
-                Toast.makeText(this, "Double click BACK to quit.", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Double click BACK to quit.", Toast.LENGTH_SHORT).show();
+                SnackbarHelper.LongSnackbar(findViewById(R.id.drawer_layout),"Double click BACK to quit.", SnackbarHelper.Info).show();
+
                 toExit = new Timer();
                 toExit.schedule(new TimerTask() {
                     @Override
@@ -306,13 +344,22 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
+        // 获取选项id
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        // 如果选中了
+        if (id == R.id.action_ocdmode) {
+            if (!isMarquee) {
+                isMarquee = true;
+
+                item.setTitle(R.string.action_ocdmode);
+            } else {
+                isMarquee = false;
+                item.setTitle(R.string.action_marquee);
+            }
+            fragment.toDoAdapter.notifyDataSetChanged();
+            recyclefragment.toDoAdapter.notifyDataSetChanged();
             return true;
         }
 
@@ -334,10 +381,25 @@ public class MainActivity extends AppCompatActivity
 
         // 对不同 item 进行不同的操作
         if (id == R.id.nav_todolist) {
+            FloatMenu.setVisibility(View.VISIBLE);
+            toolbar.setSubtitle("My Todo List");
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_main_framelayout1, fragment)
+// Todo 考虑不用压栈效果               .addToBackStack(null)
+                    .commit();
+            fragment.toDoAdapter.notifyDataSetChanged();
 
            // item.setChecked(false);
 
         } else if (id == R.id.nav_deletebox) {
+            toolbar.setSubtitle("Recycle Bin");
+            FloatMenu.setVisibility(View.GONE);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_main_framelayout1, recyclefragment)
+                    .commit();
+            recyclefragment.toDoAdapter.notifyDataSetChanged();
 
             //item.setChecked(false);
 
@@ -368,32 +430,34 @@ public class MainActivity extends AppCompatActivity
             } else {
                 item.setTitle("Delete");
             }
+        }
 
             //item.setChecked(false);
 
-        } else if (id == R.id.nav_quickreorder) {
-            // 更改 item 标题
-            if (!ToDoList.isEmpty()) {
-                if (ToDoList.get(0).todoReorderMode == ToDo.REORDER_NORMALMODE) {
-                    item.setTitle("Normal Drag");
-                } else {
-                    item.setTitle("Quick Drag");
-                }
-            } else {
-                Toast.makeText(MainActivity.this, "You should have a todo first.", Toast.LENGTH_SHORT).show();
-            }
-
-            // 更新数据集
-            for (ToDo toDo : ToDoList) {
-                toDo.todoReorderMode = toDo.todoReorderMode == ToDo.REORDER_NORMALMODE?ToDo.REORDER_QUICKMODE:ToDo.REORDER_NORMALMODE;
-            }
-
-            // 刷新界面
-            fragment.toDoAdapter.notifyDataSetChanged();
-
-           // item.setChecked(false);
-
-        } else if (id == R.id.nav_drag) {
+//         else if (id == R.id.nav_quickreorder) {
+//            // 更改 item 标题
+//            if (!ToDoList.isEmpty()) {
+//                if (ToDoList.get(0).todoReorderMode == ToDo.REORDER_NORMALMODE) {
+//                    item.setTitle("Normal Drag");
+//                } else {
+//                    item.setTitle("Quick Drag");
+//                }
+//            } else {
+//                Toast.makeText(MainActivity.this, "You should have a todo first.", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            // 更新数据集
+//            for (ToDo toDo : ToDoList) {
+//                toDo.todoReorderMode = toDo.todoReorderMode == ToDo.REORDER_NORMALMODE?ToDo.REORDER_QUICKMODE:ToDo.REORDER_NORMALMODE;
+//            }
+//
+//            // 刷新界面
+//            fragment.toDoAdapter.notifyDataSetChanged();
+//
+//           // item.setChecked(false);
+//
+//        }
+            else if (id == R.id.nav_drag) {
 
             // 设置可否拖拽
             draggable = !draggable;
@@ -420,9 +484,6 @@ public class MainActivity extends AppCompatActivity
             }
 
         } else if (id == R.id.nav_help) {
-
-//            Toast.makeText(MainActivity.this, "help", Toast.LENGTH_SHORT).show();
-//            toolbar.setSubtitle("Help");
             // TODO: 2016/8/5
             // 加载 SplashIntro 引导页
             Intent i = new Intent(this, SplashIntro.class);
@@ -430,12 +491,14 @@ public class MainActivity extends AppCompatActivity
 
             //item.setChecked(false);
         } else if (id == R.id.nav_feedback) {
+            Intent i = new Intent(this, FeedbackActivity.class);
+            startActivity(i);
 
             //item.setChecked(false);
 
         } else if (id == R.id.nav_copyright) {
 
-            //item.setChecked(false);
+            SnackbarHelper.LongSnackbar(findViewById(R.id.drawer_layout), "©2016-2017 Made By Ben.X ", SnackbarHelper.Confirm).show();
 
         }
 
@@ -475,7 +538,10 @@ public class MainActivity extends AppCompatActivity
             ToDoList.add(new ToDo("This's Title",time,time, ToDo.V_IMPORTANT,"The Red bar means Priority.","You have 4 priorities to choose.","Red means very important"));
             ToDoList.add(new ToDo("这是标题",time,time, ToDo.IMPORTANT,"Title & Priority are essential.","Item is up to you.","Items remind you points of issues."));
             ToDoList.add(new ToDo("Using Tips",time,time, ToDo.NORMAL,"Swap to remove todo.","Press and drag to change orders.","You will create more tips ."));
-            ToDoList.add(new ToDo("Thanks",time,time, ToDo.CASUAL,"This APP is not perfect.","It's made by a rookie.","I'll  appreciate your comments."));
+            ToDoList.add(new ToDo("Thanks for using our APP",time,time, ToDo.CASUAL,"This APP is not perfect.","It's made by a rookie.","I'll  appreciate your comments."));
+            ToDo t = new ToDo("This a deleted todo",time,time, ToDo.CASUAL,"This APP is not perfect.","It's made by a rookie.","I'll  appreciate your comments.");
+            t.todoDone = true;
+            DeleteToDoList.add(t);
 
             // 改写标记
             SharedPreferences.Editor e = getPrefs.edit();
@@ -487,11 +553,11 @@ public class MainActivity extends AppCompatActivity
 
         
         // 读取 待办事项
-        Cursor cursor = database.query("Todos",null,null,null,null,null,null);
+        Cursor cursor = database.query(DBHelper.Todo_Table,null,null,null,null,null,null);
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 do {
-                    Log.d("getin", "read a cursor"+cursor.getString(0));
+                    Log.d("getin", "read a cursor:"+cursor.getString(0));
                     byte data[] = cursor.getBlob(cursor.getColumnIndex("Todo"));
                     ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(data);
 
@@ -510,17 +576,65 @@ public class MainActivity extends AppCompatActivity
             Log.d("getin", "cursor null");
         }
         cursor.close();
+
+
+        // 读取 删除的待办事项
+        Cursor cursor1 = database.query(DBHelper.DeletedTodo_Table,null,null,null,null,null,null);
+        if (cursor1 != null) {
+            if (cursor1.moveToFirst()) {
+                Log.d("getin", "get in cursor1");
+                do {
+                    Log.d("getin", "read a cursor1:"+cursor1.getString(0));
+                    byte data[] = cursor1.getBlob(cursor1.getColumnIndex("Deleted"));
+                    ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(data);
+
+                    try {
+                        ObjectInputStream inputStream = new ObjectInputStream(arrayInputStream);
+                        ToDo getTodo = (ToDo) inputStream.readObject();
+                        DeleteToDoList.add(getTodo);
+                        // TODO: 2016/8/6 监测是否读出
+                        Log.d("getin", "read a deleted todo:"+getTodo.todoTitle);
+                        arrayInputStream.close();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }while (cursor1.moveToNext());
+            }Log.d("getin", "cursor1 count "+cursor1.getCount());
+        } else {
+            Log.d("getin", "cursor1 null");
+        }
+        cursor1.close();
+
+
+        // 读取 反馈的Id
+        Cursor cursor2 = database.query(DBHelper.Feedback_Table,null,null,null,null,null,null);
+        if (cursor2 != null) {
+            if (cursor2.moveToFirst()) {
+                do {
+                    Log.d("getin", "read a cursor2:"+cursor2.getString(0));
+                    String getId = cursor2.getString(cursor2.getColumnIndex("FeedbackId"));
+                    Log.d("getin", "read a feedback id :"+getId);
+                    FeedbackList.add(getId);
+                }while (cursor2.moveToNext());
+            }
+        } else {
+            Log.d("getin", "cursor2 null");
+        }
+        cursor2.close();
+
         database.close();
 
-        // TODO: 2016/8/5 还有删除的待办事项没有读取 
+        // TODO: 2016/8/5 还有删除的待办事项, 没有读取
 
 
         Log.d(TAG, "initData: todolist size" + ToDoList.size());
+        Log.d(TAG, "initData: deletedlist size" + DeleteToDoList.size());
+        Log.d(TAG, "initData: feedback size" + FeedbackList.size());
     }
 
-//    public ArrayList<ToDo> get
 
-    private void saveTodo(ToDo todo, String table) {
+    private void saveTodo(ToDo todo, String table, String column) {
         ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
         try {
             Log.d("getin", "saveTodo: " + todo.todoTitle);
@@ -533,7 +647,7 @@ public class MainActivity extends AppCompatActivity
             objectOutputStream.close();
 
             database = dbHelper.getWritableDatabase();
-            database.execSQL("insert into "+ table + " (Todo) values(?)", new Object[]{data});
+            database.execSQL("insert into "+ table + " ("+column+") values(?)", new Object[]{data});
             database.close();
 
         } catch (Exception e) {
@@ -541,16 +655,39 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void saveTodo(String string, String table) {
+
+        Log.d("getin", "saveFeedbacks id: " + string);
+
+        database = dbHelper.getWritableDatabase();
+        database.execSQL("insert into "+ table + " (FeedbackId) values(?)", new String[]{string});
+        database.close();
+
+    }
+
     private void saveData() {
         database = dbHelper.getWritableDatabase();
         database.delete(DBHelper.Todo_Table, null,null);
+        database.delete(DBHelper.DeletedTodo_Table, null,null);
+        database.delete(DBHelper.Feedback_Table, null,null);
         database.close();
 
+        // 保存待办事项
         for (ToDo toDo : ToDoList) {
-            saveTodo(toDo, DBHelper.Todo_Table);
+            saveTodo(toDo, DBHelper.Todo_Table,"Todo");
         }
 
-        // TODO: 2016/8/5 还有删除的没有保存
+        // 保存删除的待办事项
+        for (ToDo toDo : DeleteToDoList) {
+            Log.d("getin", "saved deleted todo id: " + toDo.todoTitle);
+            saveTodo(toDo, DBHelper.DeletedTodo_Table,"Deleted");
+        }
+
+        // 保存Feedback的id
+        for (String s : FeedbackList) {
+            saveTodo(s, DBHelper.Feedback_Table);
+        }
+
     }
 
 
