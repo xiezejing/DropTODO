@@ -292,6 +292,11 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
 
         } else {
+
+            // 保存结果
+            saveData();
+
+
             // 计时器
             Timer toExit;
             if (!isExit) {
@@ -634,7 +639,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private void saveTodo(ToDo todo, String table, String column) {
+    private static void saveTodo(ToDo todo, String table, String column) {
         ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
         try {
             Log.d("getin", "saveTodo: " + todo.todoTitle);
@@ -655,7 +660,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void saveTodo(String string, String table) {
+    private static void saveTodo(String string, String table) {
 
         Log.d("getin", "saveFeedbacks id: " + string);
 
@@ -665,7 +670,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void saveData() {
+    public static void saveData() {
         database = dbHelper.getWritableDatabase();
         database.delete(DBHelper.Todo_Table, null,null);
         database.delete(DBHelper.DeletedTodo_Table, null,null);

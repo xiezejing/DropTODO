@@ -1,5 +1,7 @@
 package com.benx.droptodo;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -82,6 +84,12 @@ public class EditTodoActivity extends AppCompatActivity {
     /**
      * *********** 重写方法 ***********
      */
+
+    @Override
+    public void onBackPressed() {
+        MainActivity.saveData();
+        super.onBackPressed();
+    }
 
     /**
      * EditTodoActivity 创建时调用
@@ -174,7 +182,9 @@ public class EditTodoActivity extends AppCompatActivity {
 
 
         // 时间
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm ");
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm ");
+        TodoTime = thisTodo.todoTime;
+        AlarmTime = thisTodo.toAlarmTime;
         setTodoTime = (Button) findViewById(R.id.addtodo_settodotime);
         setAlarmTime = (Button) findViewById(R.id.addtodo_setalarmtime);
         todoTime_show = (TextView) findViewById(R.id.addtodo_todotime_show);
@@ -187,19 +197,15 @@ public class EditTodoActivity extends AppCompatActivity {
         alarmTime_show.setText(dateFormat.format(thisTodo.toAlarmTime));
 
 
+        // TODO: 2016/8/7 编辑时间必须设置后提交，不编辑提交会置空。目测与dateset有关，可能初始化的时候就会触发了dateset
         // 待办时间选择器
         setTodoTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 获取 timepicker Dialog 的 view
-                View view = View.inflate(getApplicationContext(), R.layout.layout_timepicker, null);
 
-                // 获取 View 中的 DatePicker 和 TimePicker
-                final DatePicker datePicker = (DatePicker) view.findViewById(R.id.timepicker_date);
-                final TimePicker timePicker = (TimePicker) view.findViewById(R.id.timepicker_time);
-
-                // 获取当前时间
-                Calendar calendar = Calendar.getInstance();
+                // 获取当前待办时间的待办时间
+                final Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(thisTodo.todoTime);
 
                 year = calendar.get(Calendar.YEAR);
                 month = calendar.get(Calendar.MONTH);
@@ -207,59 +213,117 @@ public class EditTodoActivity extends AppCompatActivity {
                 hour = calendar.get(Calendar.HOUR_OF_DAY);
                 minute = calendar.get(Calendar.MINUTE);
 
-                // 初始化 DatePicker
-                datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
+                 DatePickerDialog pickdialog = new DatePickerDialog(EditTodoActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
-                    public void onDateChanged(DatePicker view,final int _year, int _monthOfYear, int _dayOfMonth) {
+                    public void onDateSet(DatePicker view, int _year, int _month, int _day) {
+
                         // 更新年月日
                         year = _year;
-                        month = _monthOfYear;
-                        day = _dayOfMonth;
+                        month = _month;
+                        day = _day;
 
-                        // 换位选择时间
-                        datePicker.setVisibility(View.GONE);
-                        timePicker.setVisibility(View.VISIBLE);
+
+                        // 选择时间
+                        new TimePickerDialog(EditTodoActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int _hourOfDay, int _minute) {
+
+                                // 更新时分
+                                hour = _hourOfDay;
+                                minute = _minute;
+
+                                // 更新 calendar 时间
+                                calendar.clear();
+                                calendar.set(year,month,day,hour,minute);
+
+                                // 更新显示时间
+                                todoTime_show.setText(dateFormat.format(calendar.getTimeInMillis()));
+
+                                // 更新更改时间
+                                TodoTime = calendar.getTimeInMillis();
+
+                                Log.d(TAG, "onDateSet: "+todoTime_show.getText());
+
+                            }
+                        },hour,minute,true).show();
                     }
-                });
+                }, year, month, day);
 
-                // 初始化 TimePicker
-                timePicker.setIs24HourView(true);               // 设为24小时制
-                timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-                    @Override
-                    public void onTimeChanged(TimePicker view, int hourOfDay, int _minute) {
-                        // 更新时，分
-                        hour = hourOfDay;
-                        minute = _minute;
-                    }
-                });
+                pickdialog.show();
 
 
-                // 设置 Dialog
-                final AlertDialog.Builder builder = new AlertDialog.Builder(EditTodoActivity.this);
-                builder.setView(view);
-                builder.setTitle("Set Date and Time");
-                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                // TODO: 2016/8/7 以下自定义控件无法再5.0设备上使用
 
-                        // 时间显示格式
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm ");
-
-                        // 新建 Calendar 对象
-                        Calendar c = Calendar.getInstance();
-                        c.clear();
-                        c.set(year,month,day,hour,minute);
-
-                        // 显示结果并更新按钮
-                        todoTime_show.setText(dateFormat.format(c.getTimeInMillis()));
-
-                        // 获取设置好的TodoTime
-                        TodoTime = c.getTimeInMillis();
-
-                    }
-                });
-
-                builder.show();
+//                // 获取 timepicker Dialog 的 view
+//                View view = View.inflate(getApplicationContext(), R.layout.layout_timepicker, null);
+//
+//
+//                // 获取 View 中的 DatePicker 和 TimePicker
+//                final DatePicker datePicker = (DatePicker) view.findViewById(R.id.timepicker_date);
+//                final TimePicker timePicker = (TimePicker) view.findViewById(R.id.timepicker_time);
+//
+//                // 获取当前时间
+//                Calendar calendar = Calendar.getInstance();
+//
+//                year = calendar.get(Calendar.YEAR);
+//                month = calendar.get(Calendar.MONTH);
+//                day = calendar.get(Calendar.DAY_OF_MONTH);
+//                hour = calendar.get(Calendar.HOUR_OF_DAY);
+//                minute = calendar.get(Calendar.MINUTE);
+//
+//                // 初始化 DatePicker
+//                datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
+//                    @Override
+//                    public void onDateChanged(DatePicker view,final int _year, int _monthOfYear, int _dayOfMonth) {
+//                        // 更新年月日
+//                        year = _year;
+//                        month = _monthOfYear;
+//                        day = _dayOfMonth;
+//
+//                        // 换位选择时间
+//                        datePicker.setVisibility(View.GONE);
+//                        timePicker.setVisibility(View.VISIBLE);
+//                    }
+//                });
+//
+//                // 初始化 TimePicker
+//                timePicker.setIs24HourView(true);               // 设为24小时制
+//                timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+//                    @Override
+//                    public void onTimeChanged(TimePicker view, int hourOfDay, int _minute) {
+//                        // 更新时，分
+//                        hour = hourOfDay;
+//                        minute = _minute;
+//                    }
+//                });
+//
+//
+//                // 设置 Dialog
+//                final AlertDialog.Builder builder = new AlertDialog.Builder(EditTodoActivity.this);
+//                builder.setView(view);
+//                builder.setTitle("Set Date and Time");
+//                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                        // 时间显示格式
+//                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm ");
+//
+//                        // 新建 Calendar 对象
+//                        Calendar c = Calendar.getInstance();
+//                        c.clear();
+//                        c.set(year,month,day,hour,minute);
+//
+//                        // 显示结果并更新按钮
+//                        todoTime_show.setText(dateFormat.format(c.getTimeInMillis()));
+//
+//                        // 获取设置好的TodoTime
+//                        TodoTime = c.getTimeInMillis();
+//
+//                    }
+//                });
+//
+//                builder.show();
 
             }
         });
@@ -269,71 +333,119 @@ public class EditTodoActivity extends AppCompatActivity {
         setAlarmTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 获取 timepicker Dialog 的view
-                View view = View.inflate(getApplicationContext(), R.layout.layout_timepicker, null);
 
-                // 获取 View 中的 DatePicker 和 TimePicker
-                final DatePicker datePicker = (DatePicker) view.findViewById(R.id.timepicker_date);
-                final TimePicker timePicker = (TimePicker) view.findViewById(R.id.timepicker_time);
+                // 获取当前待办事项的提醒时间
+                final Calendar calendar1 = Calendar.getInstance();
+                calendar1.setTimeInMillis(thisTodo.toAlarmTime);
 
-                // 获取当前时间
-                Calendar calendar = Calendar.getInstance();
+                year = calendar1.get(Calendar.YEAR);
+                month = calendar1.get(Calendar.MONTH);
+                day = calendar1.get(Calendar.DAY_OF_MONTH);
+                hour = calendar1.get(Calendar.HOUR_OF_DAY);
+                minute = calendar1.get(Calendar.MINUTE);
 
-                year = calendar.get(Calendar.YEAR);
-                month = calendar.get(Calendar.MONTH);
-                day = calendar.get(Calendar.DAY_OF_MONTH);
-                hour = calendar.get(Calendar.HOUR_OF_DAY);
-                minute = calendar.get(Calendar.MINUTE);
-
-                // 初始化 DatePicker
-                datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
+                final DatePickerDialog pickdialog = new DatePickerDialog(EditTodoActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
-                    public void onDateChanged(DatePicker view,final int _year, int _monthOfYear, int _dayOfMonth) {
+                    public void onDateSet(DatePicker view, int _year, int _month, int _day) {
+
                         // 更新年月日
                         year = _year;
-                        month = _monthOfYear;
-                        day = _dayOfMonth;
+                        month = _month;
+                        day = _day;
 
-                        // 换位选择时间
-                        datePicker.setVisibility(View.GONE);
-                        timePicker.setVisibility(View.VISIBLE);
-                    }
-                });
+                        new TimePickerDialog(EditTodoActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int _hourOfDay, int _minute) {
 
-                // 初始化 TimePicker
-                timePicker.setIs24HourView(true);        // 设为24小时制
-                timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-                    @Override
-                    public void onTimeChanged(TimePicker view, int hourOfDay, int _minute) {
-                        // 更新时，分
-                        hour = hourOfDay;
-                        minute = _minute;
-                    }
-                });
+                                // 更新时分
+                                hour = _hourOfDay;
+                                minute = _minute;
 
+                                // 更新 calendar1 时间
+                                calendar1.clear();
+                                calendar1.set(year,month,day,hour,minute);
 
-                // 设置 Dialog
-                final AlertDialog.Builder builder = new AlertDialog.Builder(EditTodoActivity.this);
-                builder.setView(view);
-                builder.setTitle("Set Date and Time");
-                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm ");
-                        Calendar c = Calendar.getInstance();
-                        c.clear();
-                        c.set(year,month,day,hour,minute);
+                                // 更新显示时间
+                                alarmTime_show.setText(dateFormat.format(calendar1.getTimeInMillis()));
 
-                        // 显示结果并更新按钮
-                        alarmTime_show.setText(dateFormat.format(c.getTimeInMillis()));
-
-                        // 获取设置好的 AlarmTime
-                        AlarmTime = c.getTimeInMillis();
+                                // 获取设置好的 AlarmTime
+                                AlarmTime = calendar1.getTimeInMillis();
+                            }
+                        },hour,minute,true).show();
 
                     }
-                });
+                }, year, month, day );
 
-                builder.show();
+
+                pickdialog.show();
+
+
+                // TODO: 2016/8/7 以下自定义控件不支持5.0
+                // 获取 timepicker Dialog 的view
+//                View view = View.inflate(getApplicationContext(), R.layout.layout_timepicker, null);
+//
+//                // 获取 View 中的 DatePicker 和 TimePicker
+//                final DatePicker datePicker = (DatePicker) view.findViewById(R.id.timepicker_date);
+//                final TimePicker timePicker = (TimePicker) view.findViewById(R.id.timepicker_time);
+//
+//                // 获取当前时间
+//                Calendar calendar = Calendar.getInstance();
+//
+//                year = calendar.get(Calendar.YEAR);
+//                month = calendar.get(Calendar.MONTH);
+//                day = calendar.get(Calendar.DAY_OF_MONTH);
+//                hour = calendar.get(Calendar.HOUR_OF_DAY);
+//                minute = calendar.get(Calendar.MINUTE);
+//
+//                // 初始化 DatePicker
+//                datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
+//                    @Override
+//                    public void onDateChanged(DatePicker view,final int _year, int _monthOfYear, int _dayOfMonth) {
+//                        // 更新年月日
+//                        year = _year;
+//                        month = _monthOfYear;
+//                        day = _dayOfMonth;
+//
+//                        // 换位选择时间
+//                        datePicker.setVisibility(View.GONE);
+//                        timePicker.setVisibility(View.VISIBLE);
+//                    }
+//                });
+//
+//                // 初始化 TimePicker
+//                timePicker.setIs24HourView(true);        // 设为24小时制
+//                timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+//                    @Override
+//                    public void onTimeChanged(TimePicker view, int hourOfDay, int _minute) {
+//                        // 更新时，分
+//                        hour = hourOfDay;
+//                        minute = _minute;
+//                    }
+//                });
+//
+//
+//                // 设置 Dialog
+//                final AlertDialog.Builder builder = new AlertDialog.Builder(EditTodoActivity.this);
+//                builder.setView(view);
+//                builder.setTitle("Set Date and Time");
+//                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm ");
+//                        Calendar c = Calendar.getInstance();
+//                        c.clear();
+//                        c.set(year,month,day,hour,minute);
+//
+//                        // 显示结果并更新按钮
+//                        alarmTime_show.setText(dateFormat.format(c.getTimeInMillis()));
+//
+//                        // 获取设置好的 AlarmTime
+//                        AlarmTime = c.getTimeInMillis();
+//
+//                    }
+//                });
+//
+//                builder.show();
 
             }
         });
