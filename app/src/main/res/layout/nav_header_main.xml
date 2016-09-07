@@ -18,10 +18,12 @@
         android:id="@+id/user_profilePic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clickable="true"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:src="@drawable/droplet_s"/>
 
     <TextView
+        android:id="@+id/user_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"

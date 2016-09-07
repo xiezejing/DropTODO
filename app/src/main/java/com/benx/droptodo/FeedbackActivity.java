@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -12,13 +13,16 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.wilddog.client.Wilddog;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import cn.bmob.v3.Bmob;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.SaveListener;
+//import cn.bmob.v3.Bmob;
+//import cn.bmob.v3.exception.BmobException;
+//import cn.bmob.v3.listener.SaveListener;
 
 public class FeedbackActivity extends AppCompatActivity {
     /**
@@ -41,14 +45,18 @@ public class FeedbackActivity extends AppCompatActivity {
     private Button cancel;
     private Button submit;
 
+    private Wilddog mWilddogRef;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
 
-        /** Bmob 初始化 */
-        Bmob.initialize(FeedbackActivity.this, "d5bf221e30a248f584f3e58da67dc9e7");
+
+        /** Wilddog 初始化 */
+        // Wilddog 部分
+        mWilddogRef = new Wilddog(getResources().getString(R.string.wilddog_url));
 
 
         /** FloatMenu 部分 */
@@ -124,23 +132,18 @@ public class FeedbackActivity extends AppCompatActivity {
                 } else {
 
                     // 提交表单
-                    final Feedback feedback = new Feedback(email.getText().toString(),content.getText().toString());
-                    feedback.save(new SaveListener<String>(){
-                        @Override
-                        public void done(String s, BmobException e) {
-                            if (e == null) {
-//                                SnackbarHelper.ShortSnackbar(findViewById(R.id.activity_feedback), "We've got your feedback.", SnackbarHelper.Confirm).show();
-                                Toast.makeText(FeedbackActivity.this, "We've got your feedback.", Toast.LENGTH_SHORT).show();
-                                MainActivity.FeedbackList.add(feedback.getObjectId());
-                                Log.d("getin", "done: add a new feedback'id :" + feedback.getObjectId());
+                    Feedback feedback = new Feedback(email.getText().toString(),content.getText().toString());
 
-                                finish();
-                            } else{
-                                SnackbarHelper.ShortSnackbar(findViewById(R.id.activity_feedback), "Oops! Submit later.", SnackbarHelper.Warning).show();
-                                Log.d("getin", "done: "+e.getMessage()+","+e.getErrorCode());
-                            }
-                        }
-                    });
+                    Wilddog feed = mWilddogRef.child("feedbacks").push();
+                    Map<String,String> feeddata = new HashMap<String, String>();
+                    feeddata.put("email",feedback.getEmail());
+                    feeddata.put("content",feedback.getContent());
+                    feeddata.put("reply",feedback.getReply());
+
+                    feed.setValue(feeddata);
+
+                    SnackbarHelper.LongSnackbar(findViewById(R.id.activity_feedback), "We will reply soon.", SnackbarHelper.Confirm).show();
+
                 }
             }
         });
@@ -149,7 +152,6 @@ public class FeedbackActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Log.d("getin", "onBackPressed: finish");
         finish();
     }
 }

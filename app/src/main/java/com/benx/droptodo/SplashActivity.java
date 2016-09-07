@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 
 /**
@@ -16,7 +17,7 @@ import android.view.WindowManager;
  *
  */
 
-public class SplashActivity extends Activity {
+public class SplashActivity extends AppCompatActivity{
 
     /**
      * Activity 启动时

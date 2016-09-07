@@ -3,12 +3,12 @@
     <string name="app_name">DropTODO</string>
     <string name="app_slogan">To do and make a difference.</string>
 
-    
+
     <!-- 侧栏 -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    
+
     <!-- Toolbar -->
     <string name="action_ocdmode">OCD Mode</string>
     <string name="action_marquee">Marquee Mode</string>
@@ -33,8 +33,23 @@
     <string name="addtodo_add_item2">Item No.2</string>
     <string name="addtodo_add_item3">Item No.3</string>
 
+    <!-- 登录页面 -->
+    <string name="login_title">Login</string>
+    <string name="login_email">Email</string>
+    <string name="login_password">Password</string>
+    <string name="login_password_check">Password again</string>
+    <string name="login_remember">Remember Me</string>
+    <string name="login_login">Log In</string>
+    <string name="login_signup">Sign up</string>
+    <string name="login_error_field_required">This field is required</string>
+    <string name="login_error_invalid_password">This password is too short</string>
+    <string name="login_error_invalid_email">This email address is invalid</string>
+
     <!-- 反馈页面 -->
     <string name="feedback_label_email">Email or Nickname</string>
     <string name="feedback_label_content">Feedback</string>
+
+    <!-- Wilddog 部分 -->
+    <string name="wilddog_url">https://droptodo.wilddogio.com</string>
 
 </resources>

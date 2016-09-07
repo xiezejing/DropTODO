@@ -12,6 +12,7 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
+    <!-- 引入主要框架 -->
     <include
         layout="@layout/app_bar_main"
         android:layout_width="match_parent"

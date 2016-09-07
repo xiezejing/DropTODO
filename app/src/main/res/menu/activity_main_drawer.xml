@@ -1,20 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
-        <!-- 待办事项 -->
-        <item
-            android:id="@+id/nav_todolist"
-            android:icon="@drawable/ic_menu_tololist"
-            android:title="Todo List"/>
+    <!--<group android:checkableBehavior="single">-->
 
-        <!-- 垃圾箱 -->
-        <item
-            android:id="@+id/nav_deletebox"
-            android:icon="@drawable/ic_menu_deletebox"
-            android:title="Recycle Bin"/>
 
-    </group>
+    <!--</group>-->
+
+    <item android:title="Drop Cloud">
+        <menu>
+            <!-- 登录 和 注销 -->
+            <item
+                android:id="@+id/nav_login"
+                android:icon="@drawable/ic_menu_login"
+                android:title="Login"/>
+
+            <!-- 上传 -->
+            <item
+                android:id="@+id/nav_upload"
+                android:icon="@drawable/ic_menu_upload"
+                android:title="Upload"/>
+
+            <!-- 下载 -->
+            <item
+                android:id="@+id/nav_download"
+                android:icon="@drawable/ic_menu_download"
+                android:title="Download"/>
+        </menu>
+    </item>
+
+    <item android:title="Todo Box">
+        <menu>
+            <!-- 待办事项 -->
+            <item
+                android:id="@+id/nav_todolist"
+                android:icon="@drawable/ic_menu_tololist"
+                android:title="Todo List"/>
+
+            <!-- 垃圾箱 -->
+            <item
+                android:id="@+id/nav_deletebox"
+                android:icon="@drawable/ic_menu_deletebox"
+                android:title="Recycle Bin"/>
+        </menu>
+    </item>
 
 
     <item android:title="Options">

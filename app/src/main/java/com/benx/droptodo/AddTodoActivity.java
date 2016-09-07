@@ -1,8 +1,14 @@
 package com.benx.droptodo;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -456,11 +462,36 @@ public class AddTodoActivity extends AppCompatActivity {
                     // 待办事项添加到数据集中
                     MainActivity.ToDoList.add(newTodo);
 
+                    // TODO: 2016/9/5
+                    addAlarm(newTodo);
+
                     // 关闭当前页面
                     finish();
                 }
             }
         });
 
+    }
+
+    private void addAlarm(ToDo todo){
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        intent.setAction("add_alarm");
+        intent.putExtra("title", todo.todoTitle);
+        intent.putExtra("item1", todo.todoItem1);
+        intent.putExtra("item2", todo.todoItem2);
+        intent.putExtra("item3", todo.todoItem3);
+
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, MainActivity.AlarmCount, intent, 0);
+        MainActivity.AlarmCount++;
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("AlarmCount", MainActivity.AlarmCount);
+        editor.apply();
+
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, todo.toAlarmTime, pendingIntent);
     }
 }

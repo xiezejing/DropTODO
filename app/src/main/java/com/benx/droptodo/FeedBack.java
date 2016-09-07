@@ -1,6 +1,6 @@
 package com.benx.droptodo;
 
-import cn.bmob.v3.BmobObject;
+//import cn.bmob.v3.BmobObject;
 
 /**
  * Project: DropTODO
@@ -8,7 +8,7 @@ import cn.bmob.v3.BmobObject;
  * Date:    2016/8/6
  */
 
-public class Feedback extends BmobObject {
+public class Feedback {
 
     /** 属性 */
     private String email;
